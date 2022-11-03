@@ -42,5 +42,12 @@ namespace libraryApp.Models.HelperClasses
                 }
             }
         }
+
+        public static string GenerateUniqueRandomNumbers()
+        {
+            Random generator = new Random();
+            string r = generator.Next(0, 1000000).ToString("D6");
+            return r;
+        }
     }
 }

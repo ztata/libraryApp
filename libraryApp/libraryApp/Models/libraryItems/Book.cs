@@ -27,5 +27,8 @@ namespace libraryApp.Models.libraryItems
 
         public string summary { get; set; }
 
+        [Required]
+        public string genre { get; set; }
+
     }
 }
