@@ -10,8 +10,8 @@ using libraryApp.Models.Context;
 namespace libraryApp.Migrations
 {
     [DbContext(typeof(libContext))]
-    [Migration("20221103225621_updatingClientProps")]
-    partial class updatingClientProps
+    [Migration("20221104152910_addedRenterIdToBooks")]
+    partial class addedRenterIdToBooks
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -91,8 +91,8 @@ namespace libraryApp.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ClientId")
-                        .HasColumnType("int");
+                    b.Property<string>("RenterId")
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -119,8 +119,6 @@ namespace libraryApp.Migrations
 
                     b.ToTable("Books");
                 });
-
-         
 #pragma warning restore 612, 618
         }
     }

@@ -1,4 +1,4 @@
-﻿
+﻿@model libraryApp.Models.Users.Client
 
 <div class="container">
     <!--Title-->
@@ -18,7 +18,18 @@
     <!--Make the login form here-->
     <div class="row">
         <div class="col text-center">
-            <h1>This is where the sign in form will go</h1>
+            <h4>Login Here</h4>
+            <form asp-controller="Home" asp-action="Login">
+            
+                <label asp-for="Email"></label>
+                <input asp-for="Email" /><br />
+
+                <label asp-for="Password"></label>
+                <input asp-for="Password" /><br />
+
+                <input type="submit" name="submit" value="Login" />
+
+            </form>
 
         </div>
     </div>

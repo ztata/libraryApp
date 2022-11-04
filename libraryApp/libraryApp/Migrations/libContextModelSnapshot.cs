@@ -92,6 +92,9 @@ namespace libraryApp.Migrations
                     b.Property<int?>("ClientId")
                         .HasColumnType("int");
 
+                    b.Property<string>("RenterId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -115,16 +118,7 @@ namespace libraryApp.Migrations
 
                     b.HasKey("bookId");
 
-                    b.HasIndex("ClientId");
-
                     b.ToTable("Books");
-                });
-
-            modelBuilder.Entity("libraryApp.Models.libraryItems.Book", b =>
-                {
-                    b.HasOne("libraryApp.Models.Users.Client", null)
-                        .WithMany("BooksCheckedOut")
-                        .HasForeignKey("ClientId");
                 });
 #pragma warning restore 612, 618
         }

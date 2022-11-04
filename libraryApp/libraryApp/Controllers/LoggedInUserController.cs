@@ -19,28 +19,40 @@ namespace libraryApp.Controllers
         // GET: LoggedInUserController
         public ActionResult Index(bool seeAllBooks = false)
         {
+            string userId = HttpContext.Request.Cookies["user_id"];
+            ViewBag.userId = userId;
+
             List<Book> books = null;
-            if (seeAllBooks)
+            using (libContext context = new libContext())
             {
-                using (libContext context = new libContext())
-                {
-                    books = context.Books.ToList();
-                }
+                books = context.Books.ToList();
             }
-            else
-            {
-                using (libContext context = new libContext())
-                {
-                    books = context.Books.Where(x => x.isCheckedOut == false).ToList();
-                }
-            }
+            //if (seeAllBooks)
+            //{
+            //    using (libContext context = new libContext())
+            //    {
+            //        books = context.Books.ToList();
+            //    }
+            //}
+            //else
+            //{
+            //    using (libContext context = new libContext())
+            //    {
+            //        books = context.Books.Where(x => x.isCheckedOut == false).ToList();
+            //    }
+            //}
             return View(books);
         }
 
         // GET: LoggedInUserController/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            Book book = null;
+            using (libContext context = new libContext())
+            {
+                book = context.Books.Where(x => x.bookId == id).First();
+            }
+            return View(book);
         }
 
         // GET: LoggedInUserController/Create
@@ -73,18 +85,20 @@ namespace libraryApp.Controllers
 
         //make this into the check out the book button 
         // POST: LoggedInUserController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        public ActionResult Checkout(int id)
         {
-            try
+            Book book = null;
+            using (libContext context = new libContext())
             {
-                return RedirectToAction(nameof(Index));
+                book = context.Books.Where(x => x.bookId == id).First();
+                book.isCheckedOut = true;
+                book.RenterId = HttpContext.Request.Cookies["user_id"];
+                context.Update(book);
+                context.SaveChanges();
             }
-            catch
-            {
-                return View();
-            }
+            return Redirect("~/LoggedInUser/Index");
         }
 
 

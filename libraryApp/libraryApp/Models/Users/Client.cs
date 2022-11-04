@@ -16,8 +16,6 @@ namespace libraryApp.Models.Users
         [Required]
         public int NumBooksCheckedOut { get; set; }
 
-        public List<Book> BooksCheckedOut { get; set; }
-
         [Required]
         public string FirstName { get; set; }
         [Required]

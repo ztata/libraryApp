@@ -43,10 +43,17 @@ namespace libraryApp.Controllers
             client.FirstName = collection["FirstName"];
             client.LastName = collection["LastName"];
             //SHOULD CHECK HERE TO SEE IF THE EMAIL IS UNIQUE
-            client.Email = collection["Email"];
+            bool doesEmailExist = HelperLoginMethods.CheckIfClientEmailExists(collection["Email"]);
+            if (doesEmailExist == false)
+            {
+                client.Email = collection["Email"];
+            }
+            else
+            {
+                return View("Error");
+            }            
             client.Password = HashPassword.ConvertPasswordToHashedString(collection["Password"]);
             client.NumBooksCheckedOut = 0;
-            client.BooksCheckedOut = new List<Book>();
             using (libContext context = new libContext())
             {
                 do
@@ -64,7 +71,43 @@ namespace libraryApp.Controllers
             HttpContext.Response.Cookies.Append("user_id", client.ClientId.ToString());
 
             //redirect to the loggedinuser index view
-            return View("/Views/LoggedInUser/Index");
+            return Redirect("~/LoggedInUser/Index");
+        }
+
+        //LoginMethod
+        public IActionResult Login(IFormCollection collection)
+        {
+            //checks if the email exists
+            bool validEmail = HelperLoginMethods.CheckIfClientEmailExists(collection["Email"].ToString());
+            if (validEmail)
+            {
+                Client client = null;
+                using (libContext context = new libContext())
+                {
+                    client = context.Clients.Where(x => x.Email == collection["Email"].ToString()).First();
+                    bool validPassword = HashPassword.CompareHashedClientPasswords(collection["Email"], collection["Password"]);
+                    //Sets user cookie and redirects to logged in user view
+                    if (validPassword)
+                    {
+                        //save a registered user cookie
+                        HttpContext.Response.Cookies.Append("user_id", client.ClientId.ToString());
+
+                        //redirects to logged in user view
+                        //return View("~/Views/LoggedInUser/Index");
+                        return Redirect("~/LoggedInUser/Index");
+                    }
+                    //redirects to error page
+                    else
+                    {
+                        return View("Error");
+                    }
+
+                }
+            }
+            else
+            {
+                return View("Error");
+            }
         }
 
 

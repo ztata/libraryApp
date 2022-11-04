@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using libraryApp.Models.Users;
 
 namespace libraryApp.Models.libraryItems
 {
@@ -23,7 +25,8 @@ namespace libraryApp.Models.libraryItems
         [Required]
         public bool isCheckedOut { get; set; }
 
-        //public string isbnNumber { get; set; }
+        public string RenterId { get; set; }
+
 
         public string summary { get; set; }
 
