@@ -5,58 +5,133 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-<h1>User ID Pulled from cookie is between the horizontal lines</h1>
-<hr />
-<h1>@ViewBag.userId</h1>
-<hr />
+<div class="container">
+    <div class="row">
+        <div class="col text-center">
+            <h1>Catalog</h1>
+            <hr />
+        </div>
+    </div>
+
+    <!--MAKE THIS FORM INTO A DROPDOWN BUTTON WITH THE FORM INSIDE-->
+    <!--USE GRID SYSTEM INSIDE TO GET AN INLINE FORM LAYOUT-->
+
+    <div class="row">
+        <div class="col text-center">
+            <p>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                    Search Options
+                </button>
+            </p>
+            <div class="collapse" id="collapseExample">
+                <form class="form-inline" asp-action="Index" method="get" asp-controller="LoggedInUser">
+                    <label class="sr-only" for="seeAllBooks">Availability</label>
+                    <select class="custom-select" id="seeAllBooks" name="seeAllBooks">
+                        <option selected></option>
+                        <option value="true">All</option>
+                        <option value="false">Available Now</option>
+                    </select>
+
+                    <label class="sr-only" for="genre">Genre</label>
+                    <select class="custom-select" id="genre" name="genre">
+                        <option selected></option>
+                        <option value="All">All</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Classic Fiction">Classic Fiction</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary my-1">Submit</button>
+                </form>
+            </div>
 
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.pageCount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.isCheckedOut)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.summary)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.author)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.pageCount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.isCheckedOut)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.summary)
-            </td>
-            <td>
-                <a asp-action="Details" asp-route-id="@item.bookId">Details</a> |
-                <a asp-action="Edit" asp-route-id="@item.bookId">This doesn't do anything yet'</a>
-                @*<a asp-action="Delete" asp-route-id="@item.bookId">Delete</a*@>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+            @*<form action="Index" method="get">
+
+                <fieldset>
+                    Availability <select id="seeAllBooks" name="seeAllBooks">
+                        <option value="" selected="selected"></option>
+                        <option value="true">All Titles</option>
+                        <option value="false">Available Now</option>
+                    </select>
+                </fieldset>
+
+                <fieldset>
+                    Genre <select id="genre" name="genre">
+                        <option value="" selected="selected"></option>
+                        <option value="null">All</option>
+                        <option value="Comedy">Comedy</option>
+                        <option value="Romance">Romance</option>
+                        <option value="Classic Fiction">Classic Fiction</option>
+                    </select>
+                </fieldset>
+                <p><input type="submit" value="Submit" /> </p>
+
+            </form>*@
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Title)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.author)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.pageCount)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.isCheckedOut)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.summary)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Title)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.author)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.pageCount)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.isCheckedOut)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.summary)
+                            </td>
+                            <td>
+                                <a asp-action="Details" asp-route-id="@item.bookId">Details</a> 
+                                @if (item.isCheckedOut == true && Html.ViewContext.HttpContext.Request.Cookies["user_id"] == item.RenterId)
+                                {
+                            <a asp-action="ReturnBook" asp-controller="LoggedInUser" asp-route-id="@item.bookId"> | Return Book</a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+

@@ -10,38 +10,52 @@ using libraryApp.Models.Context;
 namespace libraryApp.Controllers
 {
     public class LoggedInUserController : Controller
-
-
-    // NEED TO INCLUDE SOME METHODS HERE WHERE YOU CAN SEE WHAT BOOKS ARE CHECK OUT BY YOU 
-
-
     {
         // GET: LoggedInUserController
-        public ActionResult Index(bool seeAllBooks = false)
+        public ActionResult Index(string genre = "null", bool seeAllBooks = false)
         {
-            string userId = HttpContext.Request.Cookies["user_id"];
-            ViewBag.userId = userId;
-
             List<Book> books = null;
             using (libContext context = new libContext())
             {
-                books = context.Books.ToList();
+                //books = context.Books.ToList();
+                if (seeAllBooks)
+                {
+                    if (genre != null && genre != "All" && genre != "null")
+                    {
+                        books = context.Books.Where(x => x.genre == genre).ToList();
+                    }
+                    else
+                    {
+                        books = context.Books.ToList();
+                    }
+                }
+                else
+                {
+                    if (genre != null && genre != "All" && genre != "null")
+                    {
+                        books = context.Books.Where(x => x.genre == genre && x.isCheckedOut == false).ToList();
+                    }
+                    else
+                    {
+                        books = context.Books.Where(x => x.isCheckedOut == false).ToList();
+                    }
+                }
             }
-            //if (seeAllBooks)
-            //{
-            //    using (libContext context = new libContext())
-            //    {
-            //        books = context.Books.ToList();
-            //    }
-            //}
-            //else
-            //{
-            //    using (libContext context = new libContext())
-            //    {
-            //        books = context.Books.Where(x => x.isCheckedOut == false).ToList();
-            //    }
-            //}
+            
             return View(books);
+        }
+
+        //SHOWS ONLY CLIENTS CHECKED OUT BOOKS 
+        public ActionResult ViewClientBooks()
+        {
+            string userID = HttpContext.Request.Cookies["user_id"];
+            List<Book> result = null;
+            using (libContext context = new libContext())
+            {
+                result = context.Books.Where(x => x.RenterId == userID).ToList();
+            }
+
+            return View(result);
         }
 
         // GET: LoggedInUserController/Details/5
@@ -54,39 +68,7 @@ namespace libraryApp.Controllers
             }
             return View(book);
         }
-
-        // GET: LoggedInUserController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: LoggedInUserController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        //make this into the view book details page
-        // GET: LoggedInUserController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        //make this into the check out the book button 
-        // POST: LoggedInUserController/Edit/5
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
+ 
         public ActionResult Checkout(int id)
         {
             Book book = null;
@@ -101,28 +83,18 @@ namespace libraryApp.Controllers
             return Redirect("~/LoggedInUser/Index");
         }
 
-
-        //make this into a return the book early method 
-        // GET: LoggedInUserController/Delete/5
-        public ActionResult Delete(int id)
+        public ActionResult ReturnBook(int id)
         {
-            return View();
-        }
-
-        //make this into a delet the book early method 
-        // POST: LoggedInUserController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
+            Book book = null;
+            using (libContext context = new libContext())
             {
-                return RedirectToAction(nameof(Index));
+                book = context.Books.Where(x => x.bookId == id).First();
+                book.isCheckedOut = false;
+                book.RenterId = null;
+                context.Update(book);
+                context.SaveChanges();
             }
-            catch
-            {
-                return View();
-            }
+            return Redirect("~/LoggedInUser/Index");
         }
     }
 }

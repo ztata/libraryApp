@@ -1,0 +1,69 @@
+﻿@model IEnumerable<libraryApp.Models.libraryItems.Book>
+
+@{
+    ViewData["Title"] = "ViewClientBooks";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>My Books</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.author)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.pageCount)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.isCheckedOut)
+            </th>*@
+            @*<th>
+                @Html.DisplayNameFor(model => model.RenterId)
+            </th>*@
+            @*<th>
+                @Html.DisplayNameFor(model => model.summary)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.genre)
+            </th>
+            <th>*@</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.author)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.pageCount)
+            </td>
+            @*<td>
+                @Html.DisplayFor(modelItem => item.isCheckedOut)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RenterId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.summary)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.genre)
+            </td>*@
+            <td>
+                @*<a asp-action="Edit" asp-route-id="@item.bookId">Edit</a> |*@
+                <a asp-action="Details" asp-route-id="@item.bookId">Details</a> |
+                <a asp-action="ReturnBook" asp-controller="LoggedInUser" asp-route-id="@item.bookId">Return Book</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
