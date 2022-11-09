@@ -4,41 +4,43 @@
     <!--Title-->
     <div class="row">
         <div class="col text-center">
-            <h1>Library Application</h1>
+            <h1>New Troutsford District Library </h1>
         </div>
     </div>
 
     <!--Subtitle-->
     <div class="row">
         <div class="col text-center">
-            <h4>Login in or sign up below to continue</h4>
+            <h5>Login in or sign up below to continue</h5>
         </div>
     </div>
 
     <!--Make the login form here-->
     <div class="row">
+        <div class="col"></div>
         <div class="col text-center">
-            <h4>Login Here</h4>
             <form asp-controller="Home" asp-action="Login">
             
-                <label asp-for="Email"></label>
-                <input asp-for="Email" /><br />
+                <div class="form-group">
+                    <label asp-for="Email">Email</label>
+                    <input asp-for="Email" type="email" class="form-control" id="Email" placeholder="email@email.com" required/>
+                </div>
 
-                <label asp-for="Password"></label>
-                <input asp-for="Password" /><br />
+                <div class="form-group">
+                    <label asp-for="Password">Password</label>
+                    <input asp-for="Password" type="password" class="form-control" id="Password" required/>
+                </div>
 
-                <input type="submit" name="submit" value="Login" />
-
+                <input type="submit" name="submit" value="Login" class="btn btn-primary"/>
             </form>
-
         </div>
+        <div class="col"></div>
     </div>
 
 
     <!--make a link to a sign in page here that will get the necessary info from the user-->
     <div class="row">
         <div class="col text-center">
-            <h1>Registration LInks Below</h1>
             <a asp-action="Register" asp-controller="Home">Not a member? Register for a card and account here</a>
         </div>
     </div>

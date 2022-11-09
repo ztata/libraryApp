@@ -96,5 +96,14 @@ namespace libraryApp.Controllers
             }
             return Redirect("~/LoggedInUser/Index");
         }
+
+        //Logs User Out
+        public ActionResult Logout()
+        {
+            CookieOptions options = new CookieOptions();
+            options.Expires = System.DateTime.Now.AddDays(-1);
+            HttpContext.Response.Cookies.Append("user_id", "test", options);
+            return Redirect("~/Home/Index");
+        }
     }
 }

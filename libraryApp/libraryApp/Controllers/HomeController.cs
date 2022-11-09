@@ -19,12 +19,25 @@ namespace libraryApp.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
+            //if (HttpContext.Request.Cookies["user_id"] != null)
+            //{
+            //    //CookieOptions options = new CookieOptions();
+            //    //options.Expires = System.DateTime.Now.AddDays(-1);
+            //    HttpContext.Response.Cookies.Delete("user_id");
+            //}
+            
+
+
         }
 
         public IActionResult Index()
         {
+            CookieOptions options = new CookieOptions();
+            options.Expires = System.DateTime.Now.AddDays(-1);
+            HttpContext.Response.Cookies.Append("user_id", "test", options);
             //test cookie
             //HttpContext.Response.Cookies.Append("testCookie", "Hi There");
+
             return View();
         }
 
